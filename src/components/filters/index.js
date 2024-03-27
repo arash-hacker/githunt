@@ -1,29 +1,32 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import LanguageFilter from './language-filter';
-import ViewFilter from './view-filter';
-import './styles.css';
-import DateJumpFilter from './date-jump-filter';
+import LanguageFilter from "./language-filter";
+import ViewFilter from "./view-filter";
+import "./styles.css";
+import DateJumpFilter from "./date-jump-filter";
 
 const Filters = (props) => (
   <div className="filters-wrap mt-3 mt-sm-3 mt-md-0 mt-xl-0 mt-lg-0">
     <div className="filter-item">
       <LanguageFilter
-        selectedLanguage={ props.selectedLanguage }
-        updateLanguage={ props.updateLanguage }
+        selectedLanguage={props.selectedLanguage}
+        updateLanguage={props.updateLanguage}
+        index={props.index}
       />
     </div>
     <div className="filter-item">
       <DateJumpFilter
-        updateDateJump={ props.updateDateJump }
-        selectedDateJump={ props.selectedDateJump }
+        updateDateJump={props.updateDateJump}
+        selectedDateJump={props.selectedDateJump}
+        index={props.index}
       />
     </div>
     <div className="filter-item d-none d-sm-none d-md-none d-xl-block d-lg-block">
       <ViewFilter
-        selectedViewType={ props.selectedViewType }
-        updateViewType={ props.updateViewType }
+        selectedViewType={props.selectedViewType}
+        updateViewType={props.updateViewType}
+        index={props.index}
       />
     </div>
   </div>
@@ -35,7 +38,7 @@ Filters.propTypes = {
   updateDateJump: PropTypes.func.isRequired,
   selectedLanguage: PropTypes.string,
   selectedViewType: PropTypes.string,
-  selectedDateJump: PropTypes.string
+  selectedDateJump: PropTypes.string,
 };
 
 export default Filters;

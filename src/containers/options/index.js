@@ -1,9 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import './styles.css';
-import OptionsForm from '../../components/options-form';
-import { updateOptions } from '../../redux/preference/actions';
+import "./styles.css";
+import OptionsForm from "../../components/options-form";
+import { updateOptions } from "../../redux/preference/actions";
 
 class OptionsContainer extends React.Component {
   render() {
@@ -11,8 +11,8 @@ class OptionsContainer extends React.Component {
       <div className="options-container">
         <div className="container shadow">
           <OptionsForm
-            updateOptions={ this.props.updateOptions }
-            options={ this.props.preference.options }
+            updateOptions={this.props.updateOptions}
+            options={this.props.preference.prefs[0].options}
           />
         </div>
       </div>
@@ -22,12 +22,12 @@ class OptionsContainer extends React.Component {
 
 const mapStateToProps = (store) => {
   return {
-    preference: store.preference
+    preference: store.preference,
   };
 };
 
 const mapDispatchToProps = {
-  updateOptions
+  updateOptions,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OptionsContainer);

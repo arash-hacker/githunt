@@ -1,24 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import './styles.css';
-import ListItem from './list-item';
-import GroupHeading from '../group-heading';
-import RepositoryGrid from '../repository-grid';
+import "./styles.css";
+import ListItem from "./list-item";
+import GroupHeading from "../group-heading";
+import RepositoryGrid from "../repository-grid";
 
 class RepositoryList extends React.Component {
-
   renderGroup(repositoryGroup, counter) {
-    let groupHeading = '';
+    let groupHeading = "";
     // for the first repository group, we have the
     // heading among the filters out of the grid
     if (counter !== 0) {
       groupHeading = (
         <div className="row row-group">
           <GroupHeading
-            start={ repositoryGroup.start }
-            end={ repositoryGroup.end }
-            dateJump={ this.props.dateJump }
+            start={repositoryGroup.start}
+            end={repositoryGroup.end}
+            dateJump={this.props.dateJump}
           />
         </div>
       );
@@ -28,10 +27,12 @@ class RepositoryList extends React.Component {
     const repositories = repositoryGroup.data.items;
 
     return (
-      <div key={ groupKey } data-group-key={ groupKey }>
-        { groupHeading }
+      <div key={groupKey} data-group-key={groupKey}>
+        {groupHeading}
         <div className="row list-container">
-          { repositories.map(repository => <ListItem repository={ repository } key={ repository.id }/>) }
+          {repositories.map((repository) => (
+            <ListItem repository={repository} key={repository.id} />
+          ))}
         </div>
       </div>
     );
@@ -40,11 +41,9 @@ class RepositoryList extends React.Component {
   render() {
     return (
       <div className="repositories-list">
-        {
-          this.props.repositories.map((repositoryGroup, counter) => {
-            return this.renderGroup(repositoryGroup, counter);
-          })
-        }
+        {this.props.repositories.map((repositoryGroup, counter) => {
+          return this.renderGroup(repositoryGroup, counter);
+        })}
       </div>
     );
   }
@@ -52,7 +51,7 @@ class RepositoryList extends React.Component {
 
 RepositoryGrid.propTypes = {
   repositories: PropTypes.array.isRequired,
-  dateJump: PropTypes.string.isRequired
+  dateJump: PropTypes.string.isRequired,
 };
 
 export default RepositoryList;

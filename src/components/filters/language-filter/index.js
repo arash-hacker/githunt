@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import GithubColors  from 'github-colors';
+import React from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import GithubColors from "github-colors";
 
-import './styles.css';
-import languages from './languages';
+import "./styles.css";
+import languages from "./languages";
 
 class LanguageFilter extends React.Component {
   filterInputRef = React.createRef();
 
   state = {
-    filterText: '',
+    filterText: "",
     selectedIndex: 0,
-    showDropdown: false
+    showDropdown: false,
   };
 
   focusFilterInput = () => {
@@ -43,14 +43,14 @@ class LanguageFilter extends React.Component {
       return;
     }
 
-    domNode.scrollIntoView({ block: 'end' });
+    domNode.scrollIntoView({ block: "end" });
   }
 
   getFilteredLanguages() {
     let availableLanguages = [...languages];
 
     if (this.state.filterText) {
-      availableLanguages = availableLanguages.filter(language => {
+      availableLanguages = availableLanguages.filter((language) => {
         const languageText = language.title.toLowerCase();
         const selectedText = this.state.filterText.toLowerCase();
 
@@ -68,26 +68,33 @@ class LanguageFilter extends React.Component {
       const isSelectedIndex = counter === this.state.selectedIndex;
 
       // This will be used in making sure of the element visibility
-      const refProp = isSelectedIndex ? { ref: 'activeItem' } : {};
+      const refProp = isSelectedIndex ? { ref: "activeItem" } : {};
       const languageColor = GithubColors.get(language.title) || {
-        color: language.title === 'All Languages' ? 'transparent' : '#e8e8e8'
+        color: language.title === "All Languages" ? "transparent" : "#e8e8e8",
       };
 
       return (
-        <a className={ classNames('select-menu-item', { 'active-item': isSelectedIndex }) }
-           { ...refProp }
-           onMouseDown={ () => this.selectLanguage(counter) }
-           key={ counter }>
-          <span className='repo-language-color' style={{
-            backgroundColor: languageColor.color
-          }}></span>
-          <span className="select-menu-item-text">{ language.title }</span>
+        <a
+          className={classNames("select-menu-item", {
+            "active-item": isSelectedIndex,
+          })}
+          {...refProp}
+          onMouseDown={() => this.selectLanguage(counter)}
+          key={counter}
+        >
+          <span
+            className="repo-language-color"
+            style={{
+              backgroundColor: languageColor.color,
+            }}
+          ></span>
+          <span className="select-menu-item-text">{language.title}</span>
         </a>
       );
     });
   }
 
-  onKeyDown = e => {
+  onKeyDown = (e) => {
     const { selectedIndex } = this.state;
 
     const isEnterKey = e.keyCode === 13;
@@ -103,12 +110,12 @@ class LanguageFilter extends React.Component {
 
     // arrow up/down button should select next/previous list element
     if (isUpKey && selectedIndex > 0) {
-      this.setState(prevState => ({
-        selectedIndex: prevState.selectedIndex - 1
+      this.setState((prevState) => ({
+        selectedIndex: prevState.selectedIndex - 1,
       }));
-    } else if (isDownKey && selectedIndex < (filteredLanguages.length - 1)) {
-      this.setState(prevState => ({
-        selectedIndex: prevState.selectedIndex + 1
+    } else if (isDownKey && selectedIndex < filteredLanguages.length - 1) {
+      this.setState((prevState) => ({
+        selectedIndex: prevState.selectedIndex + 1,
       }));
     } else if (isEnterKey && filteredLanguages[selectedIndex]) {
       this.selectLanguage(selectedIndex);
@@ -118,29 +125,32 @@ class LanguageFilter extends React.Component {
   selectLanguage = (selectedIndex) => {
     const filteredLanguages = this.getFilteredLanguages();
     const selectedLanguage = filteredLanguages[selectedIndex];
-    if (!selectedLanguage || selectedLanguage.value === this.props.selectedLanguage) {
+    if (
+      !selectedLanguage ||
+      selectedLanguage.value === this.props.selectedLanguage
+    ) {
       return;
     }
 
     this.setState({
-      filterText: '',
-      showDropdown: false
+      filterText: "",
+      showDropdown: false,
     });
 
-    this.props.updateLanguage(selectedLanguage.value);
+    this.props.updateLanguage(selectedLanguage.value, this.props.index);
   };
 
   hideDropdown = () => {
     this.setState({
       showDropdown: false,
-      filterText: ''
+      filterText: "",
     });
   };
 
   filterLanguages = (e) => {
     this.setState({
       filterText: e.target.value,
-      selectedIndex: 0      // Reset and select the first language
+      selectedIndex: 0, // Reset and select the first language
     });
   };
 
@@ -152,37 +162,39 @@ class LanguageFilter extends React.Component {
         </div>
         <div className="select-menu-filters">
           <div className="select-menu-text-filter">
-            <input type="text"
-                   className="form-control"
-                   placeholder="Filter Languages"
-                   ref={ this.filterInputRef }
-                   onBlur={ this.hideDropdown }
-                   onChange={ this.filterLanguages }
-                   onKeyDown={ this.onKeyDown }
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Filter Languages"
+              ref={this.filterInputRef}
+              onBlur={this.hideDropdown}
+              onChange={this.filterLanguages}
+              onKeyDown={this.onKeyDown}
             />
           </div>
         </div>
-        <div className="select-menu-list">
-          { this.renderLanguages() }
-        </div>
+        <div className="select-menu-list">{this.renderLanguages()}</div>
       </div>
     );
   }
 
   toggleDropdown = () => {
-    this.setState(prevState => ({
-      showDropdown: !prevState.showDropdown
+    this.setState((prevState) => ({
+      showDropdown: !prevState.showDropdown,
     }));
   };
 
   render() {
     return (
-      <div className='language-filter-wrap'>
-        <button onClick={ this.toggleDropdown } className="btn btn-light language-filter shadowed">
+      <div className="language-filter-wrap">
+        <button
+          onClick={this.toggleDropdown}
+          className="btn btn-light language-filter shadowed"
+        >
           <i className="fa fa-filter mr-2"></i>
-          { this.props.selectedLanguage || 'All Languages' }
+          {this.props.selectedLanguage || "All Languages"}
         </button>
-        { this.state.showDropdown && this.getLanguageDropdown() }
+        {this.state.showDropdown && this.getLanguageDropdown()}
       </div>
     );
   }
@@ -190,7 +202,7 @@ class LanguageFilter extends React.Component {
 
 LanguageFilter.propTypes = {
   updateLanguage: PropTypes.func.isRequired,
-  selectedLanguage: PropTypes.string
+  selectedLanguage: PropTypes.string,
 };
 
 export default LanguageFilter;

@@ -1,15 +1,15 @@
 <h1 align="center">
-  	<img height="100" src="https://raw.github.com/kamranahmedse/githunt/master/public/img/logo.svg?sanitize=true" alt="Githunt" /> <br> GitHunt
+  	<img height="100" src="https://raw.github.com/arash-hacker/githunt/master/public/img/logo.svg?sanitize=true" alt="Githunt" /> <br> GitHunt
 </h1>
 
 <p align="center">
-  <a href="https://github.com/kamranahmedse/githunt">
+  <a href="https://github.com/arash-hacker/githunt">
     <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg" alt="contributions" />
   </a>
   <a href="https://chrome.google.com/webstore/detail/githunt/khpcnaokfebphakjgdgpinmglconplhp">
     <img src="https://img.shields.io/chrome-web-store/v/khpcnaokfebphakjgdgpinmglconplhp.svg" alt="version" />
   </a>
-  <a href="https://github.com/kamranahmedse/githunt/blob/master/license.md">
+  <a href="https://github.com/arash-hacker/githunt/blob/master/license.md">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license-mit" />
   </a>
 </p>
@@ -39,17 +39,17 @@
   <sub>💥 Will remember your selection of language 💥</sub>
 </p>
 
-
 ## Installation
 
-* Use Online – https://kamranahmed.info/githunt
-* Chrome Extension – https://bit.ly/githunt-chrome
+- Use Online – https://kamranahmed.info/githunt
+- Chrome Extension – https://bit.ly/githunt-chrome
 
 ## Contributions
 
-* Spread the word
-* Open pull requests
-* Reach out with any feedback [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/kamranahmedse.svg?style=social&label=Follow%20%40kamranahmedse)](https://twitter.com/kamranahmedse)
+- Spread the word
+- Open pull requests
+- Reach out with any feedback [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/arash-hacker.svg?style=social&label=Follow%20%40kamranahmedse)](https://twitter.com/arash-hacker)
 
 ## License
+
 MIT © [Kamran Ahmed](https://kamranahmed.info)

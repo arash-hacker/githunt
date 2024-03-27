@@ -1,88 +1,116 @@
-import React from 'react';
-import moment from 'moment';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from "react";
+import moment from "moment";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import './styles.css';
-import Alert from '../../components/alert';
-import Loader from '../../components/loader';
-import TopNav from '../../components/top-nav';
-import Filters from '../../components/filters';
-import GroupHeading from '../../components/group-heading';
-import { fetchTrending } from '../../redux/github/actions';
-import RepositoryList from '../../components/repository-list';
-import RepositoryGrid from '../../components/repository-grid';
-import { updateDateJump, updateLanguage, updateViewType } from '../../redux/preference/actions';
+import "./styles.css";
+import Alert from "../../components/alert";
+import Loader from "../../components/loader";
+import TopNav from "../../components/top-nav";
+import Filters from "../../components/filters";
+import GroupHeading from "../../components/group-heading";
+import { fetchTrending } from "../../redux/github/actions";
+import RepositoryList from "../../components/repository-list";
+import RepositoryGrid from "../../components/repository-grid";
+import {
+  updateDateJump,
+  updateLanguage,
+  updateViewType,
+} from "../../redux/preference/actions";
 
 class FeedContainer extends React.Component {
   componentDidMount() {
-    const existingRepositories = this.props.github.repositories || [];
-
     // If there are no loaded repositories before, fetch them
-    if (existingRepositories.length === 0) {
-      this.fetchNextRepositories();
-    }
+    this.props.github.repositories.map((repo, index) => {
+      if (repo.length === 0) {
+        this.fetchNextRepositories(index);
+      }
+    });
   }
 
-  fetchNextRepositories() {
-    const filters = this.getFilters();
-    this.props.fetchTrending(filters);
+  fetchNextRepositories(index = 0, reset = false) {
+    const filters = this.getFilters(index);
+    this.props.fetchTrending(filters, index, reset);
   }
 
   componentDidUpdate(prevProps) {
-    const currPreferences = this.props.preference;
-    const prevPreferences = prevProps.preference;
+    const currPreferences = this.props.preference.prefs;
+    const prevPreferences = prevProps.preference.prefs;
 
     // If language or dateJump has been updated, reload
     // the repositories
-    if (currPreferences.language !== prevPreferences.language ||
-      currPreferences.dateJump !== prevPreferences.dateJump) {
-      this.fetchNextRepositories();
+    if (currPreferences.length > prevPreferences.length) {
+      this.fetchNextRepositories(currPreferences.length - 1);
+      return;
+    }
+    if (currPreferences.length < prevPreferences.length) {
+      return;
+    }
+    if (
+      JSON.stringify(this.props.github.repositories) !=
+      JSON.stringify(prevProps.github.repositories)
+    ) {
+      for (let index = 0; index < currPreferences.length; index++) {
+        this.fetchNextRepositories(index, true);
+      }
+    }
+
+    for (let index = 0; index < currPreferences.length; index++) {
+      if (
+        currPreferences[index].language !== prevPreferences[index].language ||
+        currPreferences[index].dateJump !== prevPreferences[index].dateJump
+      ) {
+        this.fetchNextRepositories(index, true);
+      }
     }
   }
 
-  getFilters() {
+  getFilters(index = 0) {
     const filters = {};
 
-    filters.dateRange = this.getNextDateRange();
-    if (this.props.preference.language) {
-      filters.language = this.props.preference.language;
+    filters.dateRange = this.getNextDateRange(index);
+    if (this.props.preference.prefs[index].language) {
+      filters.language = this.props.preference.prefs[index].language;
     }
 
-    if (this.props.preference.options.token) {
-      filters.token = this.props.preference.options.token;
+    if (this.props.preference.prefs[index].options.token) {
+      filters.token = this.props.preference.prefs[index].options.token;
     }
 
     return filters;
   }
 
-  getNextDateRange() {
-    const repositories = this.props.github.repositories || [];
-    const dateJump = this.props.preference.dateJump;
+  getNextDateRange(index = 0) {
+    const repositories = this.props.github.repositories[index];
+    const dateJump = this.props.preference.prefs[index].dateJump;
 
     const dateRange = {};
     const lastRecords = repositories[repositories.length - 1];
 
     if (lastRecords) {
-      dateRange.start = moment(lastRecords.start).subtract(1, dateJump).startOf('day');
+      dateRange.start = moment(lastRecords.start)
+        .subtract(1, dateJump)
+        .startOf("day");
       dateRange.end = lastRecords.start;
     } else {
-      dateRange.start = moment().subtract(1, dateJump).startOf('day');
-      dateRange.end = moment().startOf('day');
+      dateRange.start = moment().subtract(1, dateJump).startOf("day");
+      dateRange.end = moment().startOf("day");
     }
 
     return dateRange;
   }
 
   renderTokenWarning() {
-    return !this.props.preference.options.token && (
-      <Alert type='warning'>
-        Make sure to
-        <strong className='ml-1 mr-1'>
-          <Link to='/options'>add a token</Link>
-        </strong>
-        to avoid hitting the rate limit
-      </Alert>
+    return (
+      !this.props.preference[0]?.options?.token && (
+        <Alert type="warning">
+          Make sure to
+          <strong className="ml-1 mr-1">
+            <Link to="/options">add a token</Link>
+          </strong>
+          to avoid hitting the rate limit
+        </Alert>
+      )
     );
   }
 
@@ -91,28 +119,25 @@ class FeedContainer extends React.Component {
       return null;
     }
 
-    let message = '';
+    let message = "";
     switch (this.props.github.error.toLowerCase()) {
-      case 'bad credentials':
+      case "bad credentials":
         message = (
           <span>
-            Token is invalid, try <Link to='/options'>updating the token</Link> on the options page
+            Token is invalid, try <Link to="/options">updating the token</Link>{" "}
+            on the options page
           </span>
         );
         break;
-      case 'network error':
-        message = 'Error trying to connect to GitHub servers';
+      case "network error":
+        message = "Error trying to connect to GitHub servers";
         break;
       default:
         message = this.props.github.error;
         break;
     }
 
-    return (
-      <Alert type='danger'>
-        { message }
-      </Alert>
-    );
+    return <Alert type="danger">{message}</Alert>;
   }
 
   renderAlerts() {
@@ -122,8 +147,8 @@ class FeedContainer extends React.Component {
     if (tokenWarning || error) {
       return (
         <div className="alert-group">
-          { tokenWarning }
-          { error }
+          {tokenWarning}
+          {error}
         </div>
       );
     }
@@ -131,80 +156,95 @@ class FeedContainer extends React.Component {
     return null;
   }
 
-  renderRepositoriesList() {
-    if (this.props.preference.viewType === 'grid') {
-      return <RepositoryGrid
-        repositories={ this.props.github.repositories || [] }
-        dateJump={ this.props.preference.dateJump }
-      />;
-    }
+  renderRepositoriesList(index) {
+    // if (this.props.preference.prefs[index]?.viewType === "grid") {
+    //   return (
+    //     <RepositoryGrid
+    //       repositories={this.props.github.repositories[index] || []}
+    //       dateJump={this.props.preference.prefs[index].dateJump}
+    //     />
+    //   );
+    // }
 
-    return <RepositoryList
-      repositories={ this.props.github.repositories || [] }
-      dateJump={ this.props.preference.dateJump }
-    />;
+    return (
+      <RepositoryList
+        index={index}
+        repositories={this.props.github.repositories[index] || []}
+        dateJump={this.props.preference.prefs[index]?.dateJump}
+      />
+    );
   }
 
-  hasRepositories() {
-    return this.props.github.repositories && this.props.github.repositories.length !== 0;
+  hasRepositories(index) {
+    return (
+      this.props.github.repositories[index] &&
+      this.props.github.repositories[index].length !== 0
+    );
   }
 
   render() {
     return (
       <div className="page-wrap">
-        <TopNav/>
+        <TopNav />
 
-        { this.renderAlerts() }
+        {this.renderAlerts()}
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {this.props.preference.prefs.map((pref, index, arrs) => (
+            <div
+              className="container mb-5 pb-10"
+              style={{ width: 100 / arrs.length + "%" }}
+            >
+              <div className="header-row clearfix">
+                {this.hasRepositories(index) && (
+                  <GroupHeading
+                    start={this.props.github.repositories[index].start}
+                    end={this.props.github.repositories[index].end}
+                    dateJump={pref.dateJump}
+                  />
+                )}
+                <br />
+                <div className="group-filters">
+                  {this.hasRepositories(index) && (
+                    <Filters
+                      selectedLanguage={pref.language}
+                      selectedViewType={pref.viewType}
+                      updateLanguage={this.props.updateLanguage}
+                      updateViewType={this.props.updateViewType}
+                      updateDateJump={this.props.updateDateJump}
+                      index={index}
+                      selectedDateJump={pref.dateJump}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="body-row">
+                {this.renderRepositoriesList(index)}
 
-        <div className="container mb-5 pb-4">
-          <div className="header-row clearfix">
-            {
-              this.hasRepositories() && <GroupHeading
-                start={ this.props.github.repositories[0].start }
-                end={ this.props.github.repositories[0].end }
-                dateJump={ this.props.preference.dateJump }
-              />
-            }
-            <div className="group-filters">
-              {
-                this.hasRepositories() && <Filters
-                  selectedLanguage={ this.props.preference.language }
-                  selectedViewType={ this.props.preference.viewType }
-                  updateLanguage={ this.props.updateLanguage }
-                  updateViewType={ this.props.updateViewType }
-                  updateDateJump={ this.props.updateDateJump }
-                  selectedDateJump={ this.props.preference.dateJump }
-                />
-              }
+                {this.props.github.processing[index] && <Loader />}
+
+                {!this.props.github.processing[index] &&
+                  this.hasRepositories(index) && (
+                    <button
+                      className="btn btn-primary shadow load-next-date"
+                      onClick={() => this.fetchNextRepositories(index)}
+                    >
+                      <i className="fa fa-refresh mr-2"></i>
+                      Load next {pref.dateJump}
+                    </button>
+                  )}
+              </div>
             </div>
-          </div>
-          <div className="body-row">
-            { this.renderRepositoriesList() }
-
-            { this.props.github.processing && <Loader/> }
-
-            {
-              !this.props.github.processing &&
-              this.hasRepositories() &&
-              (
-                <button className="btn btn-primary shadow load-next-date"
-                        onClick={ () => this.fetchNextRepositories() }>
-                  <i className="fa fa-refresh mr-2"></i>
-                  Load next { this.props.preference.dateJump }
-                </button>
-              )
-            }
-          </div>
+          ))}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = store => {
+const mapStateToProps = (store) => {
   return {
     preference: store.preference,
-    github: store.github
+    github: store.github,
   };
 };
 
@@ -212,7 +252,7 @@ const mapDispatchToProps = {
   updateLanguage,
   updateViewType,
   updateDateJump,
-  fetchTrending
+  fetchTrending,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer);

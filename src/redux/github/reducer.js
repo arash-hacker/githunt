@@ -1,47 +1,66 @@
-import { FETCH_TRENDING_FAILED, FETCH_TRENDING_SUCCESS, PROCESS_FETCH_TRENDING } from './types';
-import { UPDATE_DATE_TYPE, UPDATE_LANGUAGE } from '../preference/types';
+import {
+  FETCH_TRENDING_FAILED,
+  FETCH_TRENDING_SUCCESS,
+  PROCESS_FETCH_TRENDING,
+  ADDED_REPO,
+  REMOVE_REPO,
+} from "./types";
+import { UPDATE_DATE_TYPE, UPDATE_LANGUAGE } from "../preference/types";
 
 export const initialState = {
-  processing: false,
+  processing: [false],
   // Array of objects with the below format
   // [
   //    { start: '', end: '', data: [] },
   //    { start: '', end: '', data: [] }
   // ]
-  repositories: [],
+  repositories: [[]],
   error: null,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case PROCESS_FETCH_TRENDING:
+      const procss = state.processing;
+      procss[action.index] = true;
       return {
         ...state,
-        processing: true,
-        error: null
+        processing: [...procss],
+        error: null,
       };
     case UPDATE_DATE_TYPE:
     case UPDATE_LANGUAGE:
       return {
         ...state,
-        ...initialState
+        repositories: new Array(state.repositories.length).fill([]),
+        // ...initialState,
       };
+    case ADDED_REPO:
+      return { ...state, repositories: [...state.repositories, []] };
+    case REMOVE_REPO:
+      if (state.repositories.length > 1)
+        return { ...state, repositories: state.repositories.slice(0, -1) };
+      return { ...state };
     case FETCH_TRENDING_SUCCESS:
+      const clone = { ...state };
+      clone.repositories[action.payload.index] = action.payload.reset
+        ? [action.payload]
+        : [...clone.repositories[action.payload.index], action.payload];
+      clone.processing[action.payload.index] = false;
       return {
         ...state,
         // Append the fetched repositories to existing list
-        repositories: [
-          ...state.repositories,
-          action.payload
-        ],
-        processing: false,
-        error: null
+        repositories: clone.repositories,
+        processing: [...clone.processing],
+        error: null,
       };
     case FETCH_TRENDING_FAILED:
+      const procs = state.processing;
+      procs[action.index] = false;
       return {
         ...state,
-        processing: false,
-        error: action.payload
+        processing: [...procs],
+        error: action.payload,
       };
     default:
       return state;
