@@ -6,7 +6,7 @@ import { addColumn, removeColumn } from "../../redux/preference/actions";
 import { connect } from "react-redux";
 class TopNav extends React.Component {
   tweet =
-    "GitHunt(Multiple Column Version) – Most starred projects on Github by @arash-hacker https://github.com/arash-hacker/githunt";
+    "GitHunt(Multiple Column Version v.2) – Most starred projects on Github by @arash-hacker https://github.com/arash-hacker/githunt";
 
   render() {
     // We need that to show the extension button only if not running in extension
