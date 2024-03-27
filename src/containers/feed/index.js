@@ -16,10 +16,17 @@ import {
   updateDateJump,
   updateLanguage,
   updateViewType,
+  resetRepoAndPrefs,
 } from "../../redux/preference/actions";
 
 class FeedContainer extends React.Component {
   componentDidMount() {
+    if (
+      this.props.preference.prefs.length > this.props.github.repositories.length
+    ) {
+      this.props.resetRepoAndPrefs(this.props.preference.prefs);
+      return;
+    }
     // If there are no loaded repositories before, fetch them
     this.props.github.repositories.map((repo, index) => {
       if (repo.length === 0) {
@@ -53,6 +60,7 @@ class FeedContainer extends React.Component {
       for (let index = 0; index < currPreferences.length; index++) {
         this.fetchNextRepositories(index, true);
       }
+      return;
     }
 
     for (let index = 0; index < currPreferences.length; index++) {
@@ -253,6 +261,7 @@ const mapDispatchToProps = {
   updateViewType,
   updateDateJump,
   fetchTrending,
+  resetRepoAndPrefs,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer);

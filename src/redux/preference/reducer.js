@@ -6,6 +6,7 @@ import {
   ADDED_COLUMN,
   REMOVE_COLUMN,
 } from "./types";
+
 const templatePref = {
   viewType: "list",
   dateJump: "week",

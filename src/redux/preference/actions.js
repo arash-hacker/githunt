@@ -6,8 +6,17 @@ import {
   UPDATE_LANGUAGE,
   UPDATE_OPTIONS,
   UPDATE_VIEW_TYPE,
+  RESET_REPO_AND_PREFS,
 } from "./types";
 
+export const resetRepoAndPrefs = function (payload) {
+  return (dispatch) => {
+    dispatch({
+      type: RESET_REPO_AND_PREFS,
+      payload,
+    });
+  };
+};
 export const updateOptions = function (options) {
   return (dispatch) => {
     dispatch({

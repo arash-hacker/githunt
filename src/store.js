@@ -15,14 +15,14 @@ const persistedReducers = persistReducer(
     key: "githunt:root",
     storage: storage,
     stateReconciler: autoMergeLevel2,
-    // transforms: [
-    //   GithubTransform,
-    //   // expireReducer('github', {
-    //   //   expireSeconds: 3600,
-    //   //   expiredState: { ...githubState },
-    //   //   autoExpire: true
-    //   // })
-    // ],
+    transforms: [
+      GithubTransform,
+      expireReducer("github", {
+        expireSeconds: 3600,
+        expiredState: { ...githubState },
+        autoExpire: true,
+      }),
+    ],
   },
   rootReducer
 );

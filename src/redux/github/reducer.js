@@ -5,8 +5,11 @@ import {
   ADDED_REPO,
   REMOVE_REPO,
 } from "./types";
-import { UPDATE_DATE_TYPE, UPDATE_LANGUAGE } from "../preference/types";
-
+import {
+  RESET_REPO_AND_PREFS,
+  UPDATE_DATE_TYPE,
+  UPDATE_LANGUAGE,
+} from "../preference/types";
 export const initialState = {
   processing: [false],
   // Array of objects with the below format
@@ -20,6 +23,12 @@ export const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case RESET_REPO_AND_PREFS:
+      return {
+        processing: Array(action.payload.length).fill(false),
+        repositories: Array(action.payload.length).fill([]),
+        error: null,
+      };
     case PROCESS_FETCH_TRENDING:
       const procss = state.processing;
       procss[action.index] = true;
