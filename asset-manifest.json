@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/githunt/static/css/main.5b277643.chunk.css",
+    "main.js": "/githunt/static/js/main.d88f6a38.chunk.js",
+    "main.js.map": "/githunt/static/js/main.d88f6a38.chunk.js.map",
+    "runtime-main.js": "/githunt/static/js/runtime-main.fe817508.js",
+    "runtime-main.js.map": "/githunt/static/js/runtime-main.fe817508.js.map",
+    "static/css/2.92ac36f0.chunk.css": "/githunt/static/css/2.92ac36f0.chunk.css",
+    "static/js/2.af73dbb9.chunk.js": "/githunt/static/js/2.af73dbb9.chunk.js",
+    "static/js/2.af73dbb9.chunk.js.map": "/githunt/static/js/2.af73dbb9.chunk.js.map",
+    "index.html": "/githunt/index.html",
+    "precache-manifest.5b01b2734041c5e5e10d79306b4c58cd.js": "/githunt/precache-manifest.5b01b2734041c5e5e10d79306b4c58cd.js",
+    "service-worker.js": "/githunt/service-worker.js",
+    "static/css/2.92ac36f0.chunk.css.map": "/githunt/static/css/2.92ac36f0.chunk.css.map",
+    "static/css/main.5b277643.chunk.css.map": "/githunt/static/css/main.5b277643.chunk.css.map",
+    "static/js/2.af73dbb9.chunk.js.LICENSE.txt": "/githunt/static/js/2.af73dbb9.chunk.js.LICENSE.txt",
+    "static/media/font-awesome.css": "/githunt/static/media/fontawesome-webfont.fee66e71.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fe817508.js",
+    "static/css/2.92ac36f0.chunk.css",
+    "static/js/2.af73dbb9.chunk.js",
+    "static/css/main.5b277643.chunk.css",
+    "static/js/main.d88f6a38.chunk.js"
+  ]
+}
