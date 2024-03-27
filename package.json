@@ -27,7 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build-chrome": "INLINE_RUNTIME_CHUNK=false react-scripts build",
-    "build-web": "cross-env PUBLIC_URL=/ react-scripts build",
+    "build": "cross-env PUBLIC_URL=./ react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "gh-pages": "NODE_DEBUG=gh-pages gh-pages -d build",
