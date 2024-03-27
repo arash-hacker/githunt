@@ -24,7 +24,7 @@ class TopNav extends React.Component {
           >
             <Logo />
             <div className="logo-text">
-              <h4>GitHunt(Multiple Columns Version By @Arash-hacker)</h4>
+              <h4>GitHunt(Multiple Columns Version V2.0 By @Arash-hacker)</h4>
               <p className="text-muted d-none d-sm-inline-block d-md-inline-block d-xl-inline-block d-lg-inline-block">
                 Most starred projects on GitHub
               </p>
