@@ -16,7 +16,7 @@ const persistedReducers = persistReducer(
     storage: storage,
     stateReconciler: autoMergeLevel2,
     transforms: [
-      GithubTransform,
+      // GithubTransform,
       expireReducer("github", {
         expireSeconds: 3600,
         expiredState: { ...githubState },
